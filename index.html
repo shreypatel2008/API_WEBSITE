@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0a17">
+<meta name="description" content="Five live APIs, one student-built data dashboard.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>API Blitz — Live Data Playground</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0a17;--surface:#131224;--surface2:#19172d;--line:#2a2943;--ink:#f5f3ff;--muted:#a09dbd;--faint:#74718f;--lime:#d7ff5e;--cyan:#69e9dd;--pink:#ff82b8;--orange:#ffad6a;--violet:#a995ff;--blue:#8ebcff;--good:#8ce6ae;--bad:#ff8795;--radius:23px;--shadow:0 18px 60px #03030a80}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 93% 0%,#39204b80,transparent 30%),radial-gradient(ellipse at 4% 36%,#17295880,transparent 28%),var(--bg);color:var(--ink);font:15px/1.5 "Space Grotesk",system-ui,sans-serif;transition:background .3s,color .3s}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:linear-gradient(#fff0 96%,#c5bdff22 100%),linear-gradient(90deg,#fff0 96%,#c5bdff22 100%);background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 75%);z-index:-1}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+.shell{max-width:1480px;margin:0 auto;padding:20px 34px 60px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:6px 0 23px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:-.04em;font-size:18px}
+.brand-icon{height:40px;width:40px;border-radius:13px;display:grid;place-items:center;background:var(--lime);color:#171427;font-size:18px;box-shadow:0 0 26px #d7ff5e40}
+.brand-copy small{display:block;font:9px "DM Mono",monospace;letter-spacing:.13em;color:var(--muted);margin-top:1px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.live-indicator{display:flex;align-items:center;gap:8px;border:1px solid #3e4e3b;border-radius:999px;background:#1b261c;padding:8px 11px;font:10px "DM Mono",monospace;color:#d9f5a4;white-space:nowrap}
+.pulse{width:7px;height:7px;background:var(--lime);border-radius:50%;box-shadow:0 0 12px var(--lime);animation:pulse 1.7s infinite}
+@keyframes pulse{50%{opacity:.42;box-shadow:0 0 3px var(--lime)}}
+.btn{border:1px solid var(--line);background:#19172b;padding:10px 14px;border-radius:12px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:8px;transition:transform .18s,border .18s,background .18s}
+.btn:hover{transform:translateY(-2px);border-color:#605c86;background:#211e39}.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.btn svg{width:15px;height:15px}.btn.lime{background:var(--lime);color:#131226;border-color:var(--lime)}.btn.lime:hover{background:#e4ff91}
+.icon-btn{height:39px;width:39px;padding:0;justify-content:center;border-radius:12px}
+.tabs-wrap{position:sticky;top:0;z-index:10;margin:0 -4px 28px;padding:7px 4px;backdrop-filter:blur(18px);background:#0b0a17cb}
+.tabs{display:flex;gap:7px;overflow:auto;scrollbar-width:none;border:1px solid var(--line);background:#111020e8;padding:7px;border-radius:16px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;border:1px solid transparent;background:transparent;color:var(--muted);font-size:12px;font-weight:700;padding:9px 14px;border-radius:11px;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+.tab:hover{color:var(--ink);background:#211e35}.tab[aria-selected=true]{color:#171526;background:var(--lime);box-shadow:0 6px 25px #d7ff5e22}
+.tab .tab-num{font:9px "DM Mono",monospace;opacity:.7}
+.view{display:none;animation:appear .28s ease}.view.active{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.hero{min-height:285px;position:relative;display:grid;grid-template-columns:1.15fr .85fr;overflow:hidden;padding:32px 38px;border:1px solid #4c4167;border-radius:30px;background:linear-gradient(112deg,#18162e 0,#1c1835 55%,#30203d 100%);box-shadow:var(--shadow)}
+.hero:after{content:"";position:absolute;width:470px;height:470px;border-radius:50%;right:-15px;top:-110px;background:radial-gradient(circle at 35% 40%,#d7ff5e 0 3%,#ffbe69 4% 6%,#ff6eaa 7% 12%,#a995ff 13% 25%,#5155af 26% 39%,#14152b00 70%);filter:blur(1px);opacity:.86;pointer-events:none}
+.hero:before{content:"";position:absolute;right:8%;bottom:-35px;width:370px;height:128px;border-top:1px solid #d7ff5e88;border-radius:50%;transform:rotate(-18deg);box-shadow:0 -14px 0 -13px #ff82b8,0 -28px 0 -27px #69e9dd,0 -42px 0 -41px #a995ff;opacity:.7;z-index:1}
+.hero-content{position:relative;z-index:2;align-self:center;max-width:650px}
+.kicker{display:flex;align-items:center;gap:9px;color:var(--lime);font:10px "DM Mono",monospace;letter-spacing:.16em;text-transform:uppercase;margin:0 0 14px}
+.hero h1{font-size:clamp(39px,6vw,72px);line-height:.98;letter-spacing:-.07em;margin:0;font-weight:700;max-width:640px}
+.hero h1 em{color:var(--lime);font-style:normal}
+.hero p{color:#c2bfd8;font-size:14px;max-width:500px;margin:16px 0 0}
+.hero-side{position:relative;z-index:2;align-self:end;justify-self:end;text-align:right;color:#d6d2e7;font:10px "DM Mono",monospace;letter-spacing:.08em}
+.hero-side strong{display:block;color:var(--lime);font-size:13px;margin-bottom:6px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin:17px 0 22px}
+.metric{position:relative;overflow:hidden;min-height:142px;padding:17px 18px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(145deg,#17162a,#11101e);transition:transform .2s,border-color .2s}
+.metric:hover{transform:translateY(-4px);border-color:#595278}
+.metric:after{content:"";position:absolute;width:80px;height:80px;border-radius:50%;right:-24px;top:-24px;background:var(--glow,#d7ff5e);filter:blur(34px);opacity:.17}
+.metric-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font:9px "DM Mono",monospace;letter-spacing:.1em}
+.metric-icon{width:27px;height:27px;border-radius:9px;display:grid;place-items:center;background:#28243b;color:var(--tint,var(--lime));font-weight:700;font-size:13px}
+.metric-value{font:700 clamp(19px,2vw,25px)/1.2 "Space Grotesk",sans-serif;letter-spacing:-.04em;margin:14px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metric-note{font:10px "DM Mono",monospace;color:var(--muted)}
+.metric-link{position:absolute;inset:0;z-index:3}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:30px 0 13px}
+.section-head h2{font-size:19px;letter-spacing:-.04em;margin:0}.section-head p{color:var(--muted);font-size:11px;margin:4px 0 0}
+.section-tag{font:9px "DM Mono",monospace;color:var(--muted);letter-spacing:.1em;border:1px solid var(--line);padding:6px 9px;border-radius:99px}
+.columns{display:grid;grid-template-columns:1.2fr .8fr;gap:15px}
+.card{border:1px solid var(--line);background:linear-gradient(145deg,#151426,#100f1c);border-radius:var(--radius);overflow:hidden;min-width:0;box-shadow:0 10px 35px #05050c40}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:20px 21px 15px}
+.card-head h3{font-size:15px;letter-spacing:-.02em;margin:0}.card-head p{font-size:10px;color:var(--muted);margin:5px 0 0}
+.source-pill{font:9px "DM Mono",monospace;letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border-radius:8px;background:#222039;color:var(--tint,var(--lime));border:1px solid #37324f;white-space:nowrap}
+.home-story{padding:0 21px 19px}.story-feature{position:relative;padding:18px 18px 16px;border-radius:15px;background:linear-gradient(120deg,#2a1d3c,#1b2134);border:1px solid #40344f}
+.story-feature .tiny{font:9px "DM Mono",monospace;color:var(--pink);letter-spacing:.12em;text-transform:uppercase}
+.story-feature h4{font-size:16px;line-height:1.28;letter-spacing:-.03em;margin:9px 0}.story-feature p{font-size:10px;color:var(--muted);margin:0}
+.story-list{padding:0 20px 9px}.story-row{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:start;border-top:1px solid #25233a;padding:12px 0}
+.story-index{font:10px "DM Mono",monospace;color:var(--pink);padding-top:2px}.story-row-title{font-size:11px;font-weight:600;line-height:1.4}.story-row-title:hover{color:var(--lime)}
+.story-meta{font:9px "DM Mono",monospace;color:var(--faint);margin-top:4px}.story-score{font:9px "DM Mono",monospace;color:var(--orange);white-space:nowrap}
+.api-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+.api-shortcut{min-height:111px;text-align:left;border:1px solid var(--line);border-radius:16px;padding:15px;background:#131224;transition:.2s;position:relative;overflow:hidden}
+.api-shortcut:hover{transform:translateY(-3px);border-color:var(--tint,var(--lime));background:#1b1931}
+.api-shortcut:after{content:"";position:absolute;right:-18px;bottom:-25px;width:90px;height:60px;border-radius:50%;background:var(--tint,var(--lime));filter:blur(28px);opacity:.14}
+.api-shortcut b{font-size:12px;display:block;margin:8px 0 4px}.api-shortcut small{font:9px "DM Mono",monospace;color:var(--muted)}
+.api-shortcut .num{font:9px "DM Mono",monospace;color:var(--tint,var(--lime))}
+.api-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:17px}
+.api-hero{position:relative;overflow:hidden;padding:28px 30px;border-radius:26px;background:linear-gradient(120deg,#1a1731,#161428 58%,#281a38);border:1px solid #393451;margin-bottom:17px}
+.api-hero:after{content:attr(data-symbol);position:absolute;right:32px;top:10px;font-size:115px;line-height:1;font-weight:700;color:var(--tint,var(--lime));opacity:.12}
+.api-hero .kicker{margin-bottom:8px}.api-hero h1{font-size:clamp(30px,4vw,48px);letter-spacing:-.06em;line-height:1;margin:0}.api-hero p{color:var(--muted);font-size:12px;margin:11px 0 0;max-width:650px;position:relative;z-index:1}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:17px}
+.mini-stat{background:#121121;border:1px solid var(--line);border-radius:16px;padding:16px}.mini-stat label{display:block;font:9px "DM Mono",monospace;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}.mini-stat strong{display:block;font-size:20px;margin-top:7px;letter-spacing:-.03em}.mini-stat small{font:9px "DM Mono",monospace;color:var(--faint)}
+.data-table{width:100%;border-collapse:collapse}.data-table th{text-align:left;color:var(--faint);font:9px "DM Mono",monospace;letter-spacing:.08em;text-transform:uppercase;padding:0 12px 10px}.data-table td{padding:12px;border-top:1px solid #242238;font-size:11px}.data-table tr:hover td{background:#1b1930}.coin-name{font-weight:700}.coin-symbol{font:9px "DM Mono",monospace;color:var(--muted);margin-left:6px}.right{text-align:right}.positive{color:var(--good)}.negative{color:var(--bad)}
+.table-wrap{padding:0 18px 17px;overflow:auto}
+.converter{padding:4px 20px 20px}.conversion-output{font:700 clamp(30px,4vw,44px)/1.1 "DM Mono",monospace;letter-spacing:-.065em;margin:5px 0 19px;color:var(--lime);overflow-wrap:anywhere}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field label{font:9px "DM Mono",monospace;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.field input,.field select{width:100%;background:#0e0d18;border:1px solid #32304b;border-radius:11px;padding:11px 12px;outline:none;font-size:12px;min-width:0}
+.field input:focus,.field select:focus{border-color:var(--lime);box-shadow:0 0 0 3px #d7ff5e12}
+.rate-note{font:10px "DM Mono",monospace;color:var(--muted);margin-top:13px;min-height:18px}
+.converter-actions{display:flex;gap:9px;margin-top:13px}
+.fav-rates{display:grid;gap:9px;padding:0 20px 18px}.fav-rate{display:flex;justify-content:space-between;padding:11px 12px;background:#121121;border:1px solid #28263e;border-radius:11px;font-size:11px}.fav-rate strong{font:12px "DM Mono",monospace;color:var(--cyan)}
+.gold-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gold-price{padding:21px;border-radius:20px;border:1px solid #4f3e2c;background:linear-gradient(145deg,#2a201a,#181522);position:relative;overflow:hidden}
+.gold-price.silver{border-color:#35445a;background:linear-gradient(145deg,#1c2632,#171522)}
+.gold-price h3{font-size:13px;margin:0}.gold-price .big{font-size:clamp(25px,3vw,37px);font-weight:700;letter-spacing:-.05em;margin:16px 0 5px}
+.gold-price .unit{font:10px "DM Mono",monospace;color:var(--muted)}.gold-price .tstamp{font:9px "DM Mono",monospace;color:#b69e78;margin-top:14px}
+.calc{padding:20px;border:1px solid var(--line);background:#131224;border-radius:18px;margin-top:15px}
+.calc h3{margin:0 0 14px;font-size:14px}.calc-output{font-size:20px;font-weight:700;color:var(--orange);margin-top:14px}
+.notice{padding:12px 14px;background:#211d31;border:1px solid #39334c;border-radius:12px;color:var(--muted);font-size:10px;line-height:1.6;margin-top:14px}
+.econ-connect{padding:21px;border-radius:18px;background:linear-gradient(130deg,#1b1932,#171524);border:1px solid #39344f}
+.econ-connect h3{font-size:14px;margin:0 0 7px}.econ-connect p{font-size:10px;color:var(--muted);margin:0 0 14px}
+.econ-form{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:end}.econ-form .field:first-child{grid-column:span 2}
+.econ-results{margin-top:17px;display:none}.econ-results.show{display:block}
+.chart-wrap{padding:15px 18px 12px;border-radius:17px;background:#10101d;border:1px solid #29273d;margin-top:14px}
+.chart-wrap svg{width:100%;height:180px;display:block;overflow:visible}.chart-grid{stroke:#29273d;stroke-width:1}.chart-line{fill:none;stroke:var(--lime);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart-fill{fill:url(#chartGrad);opacity:.25}
+.news-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.feed-switch{border:1px solid #393650;background:#18172a;color:var(--muted);padding:7px 10px;border-radius:9px;font:10px "DM Mono",monospace}.feed-switch.selected{color:#181326;background:var(--pink);border-color:var(--pink)}
+.search-field{width:min(250px,100%);background:#0f0e1a;border:1px solid #393650;border-radius:10px;padding:8px 11px;font-size:11px;outline:none}
+.news-list{padding:0 20px 17px}.news-row{display:grid;grid-template-columns:34px 1fr auto;gap:11px;padding:15px 0;border-top:1px solid #29273c}
+.news-rank{font:11px "DM Mono",monospace;color:var(--pink)}.news-title{font-size:13px;font-weight:600;line-height:1.4}.news-title:hover{color:var(--lime)}.news-host{font:9px "DM Mono",monospace;color:var(--muted);margin-top:5px}.news-points{font:10px "DM Mono",monospace;color:var(--orange);white-space:nowrap;padding-top:2px}
+.docs-link{color:var(--cyan);font:10px "DM Mono",monospace}.docs-link:hover{text-decoration:underline}
+.api-info{padding:18px 19px}.api-info h3{font-size:13px;margin:0 0 10px}.info-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid #27253a;font-size:10px;color:var(--muted)}.info-row strong{color:var(--ink);font:10px "DM Mono",monospace;text-align:right}
+.status-dot{height:7px;width:7px;display:inline-block;border-radius:50%;background:var(--faint);margin-right:7px}.status-dot.ok{background:var(--good);box-shadow:0 0 9px #8ce6ae66}.status-dot.bad{background:var(--bad)}
+.footer{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding:19px 2px 0;margin-top:32px;color:var(--faint);font:9px "DM Mono",monospace}
+.mono{font-family:"DM Mono",monospace}.muted{color:var(--muted)}.empty{padding:22px;text-align:center;color:var(--muted);font-size:11px}.error{color:var(--bad)!important}.loading{opacity:.65}
+body.light{color-scheme:light;--bg:#f3f2fc;--surface:#fff;--surface2:#eceafb;--line:#d9d7ed;--ink:#1b1930;--muted:#67647f;--faint:#83809b;--shadow:0 18px 50px #504b7b1c;background:radial-gradient(ellipse at 93% 0%,#edb9d680,transparent 30%),radial-gradient(ellipse at 4% 36%,#c8d7ff80,transparent 28%),var(--bg)}
+body.light:before{opacity:.35;background-image:linear-gradient(#fff0 96%,#8d87bd18 100%),linear-gradient(90deg,#fff0 96%,#8d87bd18 100%)}
+body.light .tabs-wrap{background:#f3f2fccc}body.light .tabs{background:#ffffffdb}
+body.light .metric,body.light .card,body.light .api-shortcut,body.light .mini-stat,body.light .fav-rate,body.light .calc,body.light .econ-connect,body.light .chart-wrap,body.light .api-info{background:#fff}
+body.light .hero{background:linear-gradient(112deg,#272346,#3d3564 60%,#66405e);color:#f8f6ff}
+body.light .api-hero{background:linear-gradient(120deg,#f2edff,#f7f3ff 58%,#fff0f6)}
+body.light .api-hero h1{color:#1b1930}
+body.light .api-hero p{color:#686580}
+body.light .tab[aria-selected=true]{color:#171526}
+body.light .story-feature{background:linear-gradient(120deg,#f7eaff,#edf1ff);border-color:#e3d8f5}
+body.light .story-feature p{color:#6b6782}
+body.light .field input,body.light .field select,body.light .search-field{background:#f8f7ff;border-color:#d9d7ed;color:#1b1930}
+body.light .btn{background:#fff;color:#27243d}
+body.light .btn.lime{background:var(--lime);color:#171526}
+body.light .live-indicator{background:#edf5df;color:#325017;border-color:#d2e3b7}
+body.light .gold-price{background:linear-gradient(145deg,#fff3de,#fff);border-color:#ecd9b9}
+body.light .gold-price.silver{background:linear-gradient(145deg,#edf4fc,#fff);border-color:#d5e1ee}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.api-grid{grid-template-columns:repeat(3,1fr)}.hero:after{right:-115px}.api-layout{grid-template-columns:1fr .75fr}}
+@media(max-width:800px){.shell{padding:15px 18px 45px}.hero{grid-template-columns:1fr;min-height:275px;padding:28px}.hero:after{right:-155px;opacity:.55}.hero-side{justify-self:start;text-align:left;margin-top:24px}.columns,.api-layout{grid-template-columns:1fr}.api-grid{grid-template-columns:repeat(2,1fr)}.gold-wrap{grid-template-columns:1fr 1fr}.topbar{align-items:flex-start}.live-indicator{display:none}}
+@media(max-width:540px){.shell{padding:10px 12px 35px}.brand{font-size:16px}.brand-icon{width:35px;height:35px}.topbar{padding-bottom:13px}.tabs-wrap{margin:0 -12px 16px;padding:7px 12px}.tab{padding:9px 11px;font-size:11px}.tab .tab-num{display:none}.hero{border-radius:22px;padding:24px 21px;min-height:310px}.hero h1{font-size:42px}.hero:after{right:-225px;top:-50px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.metric{min-height:124px;padding:14px}.metric-value{font-size:20px}.stats .metric:last-child{grid-column:1/-1}.api-grid{grid-template-columns:1fr 1fr;gap:8px}.api-shortcut{padding:12px;min-height:105px}.section-head{align-items:flex-start;flex-direction:column}.section-tag{align-self:flex-start}.gold-wrap{grid-template-columns:1fr}.stat-row{grid-template-columns:1fr 1fr}.stat-row .mini-stat:last-child{grid-column:1/-1}.econ-form{grid-template-columns:1fr 1fr}.econ-form .field:first-child{grid-column:1/-1}.econ-form button{grid-column:1/-1}.footer{flex-direction:column}.card-head{padding:17px 16px 13px}.table-wrap,.story-list,.news-list{padding-left:14px;padding-right:14px}.home-story{padding-left:14px;padding-right:14px}.converter{padding-left:16px;padding-right:16px}.news-row{grid-template-columns:27px 1fr auto;gap:8px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar">
+  <a class="brand" href="#home" aria-label="API Blitz home"><span class="brand-icon">↗</span><span class="brand-copy">API BLITZ<small>LIVE DATA PLAYGROUND</small></span></a>
+  <div class="top-actions">
+    <div class="live-indicator"><i class="pulse"></i><span id="connection-label">CONNECTING 5 SOURCES</span></div>
+    <label class="auto-toggle" style="display:flex;align-items:center;gap:6px;font:10px 'DM Mono',monospace;color:var(--muted);cursor:pointer"><input id="auto-refresh" type="checkbox" checked style="accent-color:#d7ff5e">AUTO</label>
+    <span class="mono muted" id="next-update" style="font-size:9px">NEXT —</span>
+    <button class="btn icon-btn" id="theme-button" type="button" aria-label="Toggle color theme" title="Toggle theme">☼</button>
+    <button class="btn lime" id="refresh-button" type="button"><svg id="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 11.7-2L20 12M4 12l2.7 5a7 7 0 0 0 11.7-2"/></svg><span>Refresh</span></button>
+  </div>
+</header>
+
+<div class="tabs-wrap"><nav class="tabs" role="tablist" aria-label="API sections">
+  <button class="tab" role="tab" aria-selected="true" data-view="home"><span class="tab-num">00</span> Home</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="coin"><span class="tab-num">01</span> CoinPaprika</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="gold"><span class="tab-num">02</span> Goldprice.dev</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="fx"><span class="tab-num">03</span> Frankfurter</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="econ"><span class="tab-num">04</span> EconDB</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="hn"><span class="tab-num">05</span> Hacker News</button>
+</nav></div>
+
+<main>
+<section class="view active" id="view-home" role="tabpanel">
+  <div class="hero">
+    <div class="hero-content">
+      <p class="kicker"><span class="pulse"></span><span id="today-label">FIVE APIS · ONE LIVE PULSE</span></p>
+      <h1>Your data.<br><em>In motion.</em></h1>
+      <p>Crypto, gold, currency, economic indicators and the stories shaping tech — all in one interactive playground.</p>
+    </div>
+    <div class="hero-side"><strong id="home-date">TODAY</strong><span id="home-status">Waiting for first sync…</span></div>
+  </div>
+  <div class="stats">
+    <article class="metric" style="--tint:var(--lime);--glow:var(--lime)"><div class="metric-top"><span>CRYPTO · BTC</span><span class="metric-icon">₿</span></div><div class="metric-value" id="home-btc">—</div><div class="metric-note" id="home-btc-note">CoinPaprika · loading</div><a href="#coin" class="metric-link" data-jump="coin" aria-label="Open CoinPaprika tab"></a></article>
+    <article class="metric" style="--tint:var(--orange);--glow:var(--orange)"><div class="metric-top"><span>GOLD · INR / 10G</span><span class="metric-icon">Au</span></div><div class="metric-value" id="home-gold">—</div><div class="metric-note" id="home-gold-note">Goldprice.dev · loading</div><a href="#gold" class="metric-link" data-jump="gold" aria-label="Open Goldprice tab"></a></article>
+    <article class="metric" style="--tint:var(--cyan);--glow:var(--cyan)"><div class="metric-top"><span>USD → INR</span><span class="metric-icon">₹</span></div><div class="metric-value" id="home-fx">—</div><div class="metric-note" id="home-fx-note">Frankfurter · loading</div><a href="#fx" class="metric-link" data-jump="fx" aria-label="Open Frankfurter tab"></a></article>
+    <article class="metric" style="--tint:var(--violet);--glow:var(--violet)"><div class="metric-top"><span>US CPI INDEX</span><span class="metric-icon">↗</span></div><div class="metric-value" id="home-econ">—</div><div class="metric-note" id="home-econ-note">EconDB · connect token</div><a href="#econ" class="metric-link" data-jump="econ" aria-label="Open EconDB tab"></a></article>
+    <article class="metric" style="--tint:var(--pink);--glow:var(--pink)"><div class="metric-top"><span>TOP STORY SCORE</span><span class="metric-icon">Y</span></div><div class="metric-value" id="home-hn">—</div><div class="metric-note" id="home-hn-note">Hacker News · loading</div><a href="#hn" class="metric-link" data-jump="hn" aria-label="Open Hacker News tab"></a></article>
+  </div>
+  <div class="section-head"><div><h2>The live desk</h2><p>Five independent API connections, each with its own refresh rhythm.</p></div><span class="section-tag" id="live-count">0 / 5 READY</span></div>
+  <div class="columns">
+    <section class="card">
+      <div class="card-head"><div><h3>Right now in tech</h3><p>Top Hacker News story · refreshed every minute</p></div><span class="source-pill" style="--tint:var(--pink)">HN FIREBASE</span></div>
+      <div class="home-story" id="home-story"><div class="empty">Fetching the front page…</div></div>
+    </section>
+    <section class="card">
+      <div class="card-head"><div><h3>API health check</h3><p>Request status and last successful sync</p></div><span class="source-pill">CONNECTIONS</span></div>
+      <div class="api-info">
+        <div class="info-row"><span><i class="status-dot" data-dot="coin"></i>CoinPaprika</span><strong data-status="coin">Connecting</strong></div>
+        <div class="info-row"><span><i class="status-dot" data-dot="gold"></i>Goldprice.dev</span><strong data-status="gold">Connecting</strong></div>
+        <div class="info-row"><span><i class="status-dot" data-dot="fx"></i>Frankfurter</span><strong data-status="fx">Connecting</strong></div>
+        <div class="info-row"><span><i class="status-dot" data-dot="econ"></i>EconDB</span><strong data-status="econ">Token needed</strong></div>
+        <div class="info-row"><span><i class="status-dot" data-dot="hn"></i>Hacker News</span><strong data-status="hn">Connecting</strong></div>
+      </div>
+    </section>
+  </div>
+  <div class="section-head"><div><h2>Jump into an API</h2><p>Explore the response, use the controls and see what each API can do.</p></div><span class="section-tag">5 API TABS</span></div>
+  <div class="api-grid">
+    <button class="api-shortcut" data-jump="coin" style="--tint:var(--lime)"><span class="num">01 / MARKET DATA</span><b>CoinPaprika</b><small>Three-coin watchlist</small></button>
+    <button class="api-shortcut" data-jump="gold" style="--tint:var(--orange)"><span class="num">02 / METALS</span><b>Goldprice.dev</b><small>Gold value calculator</small></button>
+    <button class="api-shortcut" data-jump="fx" style="--tint:var(--cyan)"><span class="num">03 / CURRENCY</span><b>Frankfurter</b><small>Pair converter</small></button>
+    <button class="api-shortcut" data-jump="econ" style="--tint:var(--violet)"><span class="num">04 / ECONOMICS</span><b>EconDB</b><small>Macro series explorer</small></button>
+    <button class="api-shortcut" data-jump="hn" style="--tint:var(--pink)"><span class="num">05 / COMMUNITY</span><b>Hacker News</b><small>Live story feeds</small></button>
+  </div>
+</section>
+
+<section class="view" id="view-coin" role="tabpanel">
+  <div class="api-hero" data-symbol="₿" style="--tint:var(--lime)"><p class="kicker">API 01 · MARKET DATA</p><h1>CoinPaprika</h1><p>Crypto prices, market caps and daily movement. This watchlist pulls BTC, ETH and SOL from the live ticker API.</p></div>
+  <div class="stat-row">
+    <div class="mini-stat"><label>Watchlist</label><strong>03 assets</strong><small>BTC · ETH · SOL</small></div>
+    <div class="mini-stat"><label>Refresh interval</label><strong>10 minutes</strong><small>Provider prices update periodically</small></div>
+    <div class="mini-stat"><label>Last synced</label><strong id="coin-last">Waiting</strong><small id="coin-health" data-status="coin">Connecting</small></div>
+  </div>
+  <div class="api-layout">
+    <section class="card"><div class="card-head"><div><h3>Watchlist</h3><p>Prices shown in USD · values from the provider response</p></div><span class="source-pill" style="--tint:var(--lime)">COINPAPRIKA</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Asset</th><th class="right">Price</th><th class="right">24h</th><th class="right">Market cap</th></tr></thead><tbody id="coin-table"><tr><td colspan="4" class="empty">Loading tickers…</td></tr></tbody></table></div></section>
+    <aside class="card"><div class="card-head"><div><h3>Reading the data</h3><p>One response gives several useful signals.</p></div></div><div class="api-info"><div class="info-row"><span>Endpoint</span><strong>/v1/tickers/{id}</strong></div><div class="info-row"><span>Fields used</span><strong>price · % change · cap</strong></div><div class="info-row"><span>Auto refresh</span><strong>10 minutes</strong></div><div class="info-row"><span>Source docs</span><a class="docs-link" href="https://coinpaprika.com/api/" target="_blank" rel="noreferrer">Open docs ↗</a></div></div></aside>
+  </div>
+</section>
+
+<section class="view" id="view-gold" role="tabpanel">
+  <div class="api-hero" data-symbol="Au" style="--tint:var(--orange)"><p class="kicker">API 02 · METALS</p><h1>Goldprice.dev</h1><p>Gold spot pricing in rupees, with an interactive gram calculator. The free/keyless endpoint is delayed by around 15 minutes.</p></div>
+  <div class="api-layout">
+    <div>
+      <div class="gold-wrap">
+        <article class="gold-price"><h3>Gold · XAU / INR</h3><div class="big" id="gold-10g">—</div><div class="unit">INR / 10 grams · calculated from spot per troy ounce</div><div class="tstamp" id="gold-stamp">Waiting for price response</div></article>
+        <article class="gold-price silver"><h3>Gold · spot per troy ounce</h3><div class="big" id="gold-ounce">—</div><div class="unit">INR / troy ounce · XAU-INR-SPOT</div><div class="tstamp" id="gold-delay">Free data may be delayed</div></article>
+      </div>
+      <section class="calc"><h3>Gold value calculator</h3><div class="field-grid"><div class="field"><label for="gold-grams">Weight (grams)</label><input type="number" id="gold-grams" min="0" step="any" value="10"></div><div class="field"><label for="gold-karat">Purity</label><select id="gold-karat"><option value="1">24K · 99.9%</option><option value="0.9167">22K · 91.67%</option><option value="0.75">18K · 75%</option><option value="0.585">14K · 58.5%</option></select></div></div><div class="calc-output" id="gold-calc">Waiting for live gold rate…</div><div class="rate-note">Estimate uses the XAU reference price only. It does not include tax, making charges or local premiums.</div></section>
+    </div>
+    <aside class="card"><div class="card-head"><div><h3>Gold API connection</h3><p>Fetched through a same-site endpoint.</p></div><span class="source-pill" style="--tint:var(--orange)">GOLDPRICE.DEV</span></div><div class="api-info"><div class="info-row"><span>Metal symbol</span><strong>XAU-INR-SPOT</strong></div><div class="info-row"><span>API update type</span><strong>15m-delayed free spot</strong></div><div class="info-row"><span>Last synced</span><strong id="gold-last">Waiting</strong></div><div class="info-row"><span>Source docs</span><a class="docs-link" href="https://goldprice.dev/docs/endpoints/prices" target="_blank" rel="noreferrer">Open docs ↗</a></div></div><div class="notice">Goldprice.dev does not allow browser CORS, so the site fetches it server-side and returns only the public price data.</div></aside>
+  </div>
+</section>
+
+<section class="view" id="view-fx" role="tabpanel">
+  <div class="api-hero" data-symbol="₹" style="--tint:var(--cyan)"><p class="kicker">API 03 · CURRENCY</p><h1>Frankfurter</h1><p>Convert between currencies using daily reference rates. The result recalculates as you edit the amount or change either currency.</p></div>
+  <div class="api-layout">
+    <section class="card"><div class="card-head"><div><h3>Currency converter</h3><p>Reference rates update when providers publish a new observation.</p></div><span class="source-pill" style="--tint:var(--cyan)">FRANKFURTER V2</span></div><div class="converter"><div class="conversion-output" id="fx-result">—</div><div class="field-grid"><div class="field"><label for="fx-amount">Amount</label><input type="number" id="fx-amount" value="1" min="0" step="any"></div><div class="field"><label for="fx-from">From</label><select id="fx-from"><option>USD</option><option>INR</option><option>EUR</option><option>GBP</option><option>JPY</option><option>CAD</option><option>AUD</option><option>CHF</option></select></div><div class="field"><label for="fx-to">To</label><select id="fx-to"><option>INR</option><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>CAD</option><option>AUD</option><option>CHF</option></select></div><div class="field"><label>&nbsp;</label><button class="btn" id="fx-swap" type="button">Swap ↔</button></div></div><div class="converter-actions"><button class="btn lime" id="fx-convert" type="button">Get latest rate</button><button class="btn" id="fx-refresh" type="button">Refresh rate</button></div><div class="rate-note" id="fx-note">Loading latest USD → INR reference rate…</div></div></section>
+    <aside class="card"><div class="card-head"><div><h3>Popular pairs</h3><p>Updated from the same provider.</p></div></div><div class="fav-rates" id="fav-rates"><div class="empty">Loading common rates…</div></div><div class="api-info"><div class="info-row"><span>Endpoint</span><strong>/v2/rate/{base}/{quote}</strong></div><div class="info-row"><span>Last synced</span><strong id="fx-last">Waiting</strong></div><div class="info-row"><span>Source docs</span><a class="docs-link" href="https://frankfurter.dev/v2/" target="_blank" rel="noreferrer">Open docs ↗</a></div></div></aside>
+  </div>
+</section>
+
+<section class="view" id="view-econ" role="tabpanel">
+  <div class="api-hero" data-symbol="∑" style="--tint:var(--violet)"><p class="kicker">API 04 · ECONOMICS</p><h1>EconDB</h1><p>Explore a macroeconomic time series such as the U.S. consumer price index. This API requires an EconDB token for series data.</p></div>
+  <div class="api-layout">
+    <div>
+      <section class="econ-connect"><h3>Connect your EconDB token</h3><p>The token is kept in this page’s memory only. It is sent over HTTPS to the site endpoint and is cleared when you reload the page.</p><div class="econ-form"><div class="field"><label for="econ-series">Series code</label><input id="econ-series" value="CPIUS" spellcheck="false"></div><div class="field"><label for="econ-token">EconDB token</label><input id="econ-token" type="password" autocomplete="off" placeholder="Paste your API token"></div><button class="btn" id="econ-connect" type="button">Connect</button></div><div class="rate-note" id="econ-message">Enter your API token to load real economic data. No demo values are shown.</div></section>
+      <section class="econ-results" id="econ-results"><div class="stat-row"><div class="mini-stat"><label>Latest observation</label><strong id="econ-value">—</strong><small id="econ-date">—</small></div><div class="mini-stat"><label>Series</label><strong id="econ-name">CPIUS</strong><small>EconDB</small></div><div class="mini-stat"><label>Data points</label><strong id="econ-count">—</strong><small>From API response</small></div></div><div class="chart-wrap"><div class="mono muted" style="font-size:10px">RECENT OBSERVATIONS</div><svg id="econ-chart" viewBox="0 0 700 180" role="img" aria-label="EconDB series chart"></svg></div></section>
+    </div>
+    <aside class="card"><div class="card-head"><div><h3>EconDB connection</h3><p>Real series data requires your API token.</p></div><span class="source-pill" style="--tint:var(--violet)">ECONDB</span></div><div class="api-info"><div class="info-row"><span>Default series</span><strong>CPIUS</strong></div><div class="info-row"><span>Auth</span><strong>API token</strong></div><div class="info-row"><span>Last synced</span><strong id="econ-last">Not connected</strong></div><div class="info-row"><span>Source docs</span><a class="docs-link" href="https://developers.econdb.com/swagger/" target="_blank" rel="noreferrer">Open docs ↗</a></div></div><div class="notice">The dashboard never invents an economic value. If the token is missing or rejected, this tab explains the API response.</div></aside>
+  </div>
+</section>
+
+<section class="view" id="view-hn" role="tabpanel">
+  <div class="api-hero" data-symbol="Y" style="--tint:var(--pink)"><p class="kicker">API 05 · COMMUNITY SIGNAL</p><h1>Hacker News</h1><p>Browse current Top, New and Show HN stories. Search filters the loaded feed instantly.</p></div>
+  <section class="card"><div class="card-head"><div><h3>Story feed</h3><p>Stories link to their Hacker News discussion.</p></div><div class="news-controls"><button class="feed-switch selected" data-feed="topstories">TOP</button><button class="feed-switch" data-feed="newstories">NEW</button><button class="feed-switch" data-feed="showstories">SHOW HN</button><input class="search-field" id="hn-search" type="search" placeholder="Filter loaded stories"></div></div><div class="news-list" id="hn-list"><div class="empty">Loading story feed…</div></div><div class="api-info"><div class="info-row"><span>Last synced</span><strong id="hn-last">Waiting</strong></div><div class="info-row"><span>Source docs</span><a class="docs-link" href="https://github.com/HackerNews/API" target="_blank" rel="noreferrer">Open docs ↗</a></div></div></section>
+</section>
+</main>
+<footer class="footer"><span>API BLITZ 2026 · BUILT FOR THE STUDENT API ASSIGNMENT</span><span>Rates and market data are for learning and informational use.</span></footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const REFRESH={coin:600000,gold:120000,fx:900000,econ:900000,hn:60000};
+const state={active:"home",feed:"topstories",auto:true,busy:new Set(),last:{},data:{coins:[],gold:null,fx:null,econ:null,stories:[]},econToken:"",econSeries:"CPIUS",rates:new Map()};
+const COINS=[{id:"btc-bitcoin",name:"Bitcoin",symbol:"BTC",mark:"₿"},{id:"eth-ethereum",name:"Ethereum",symbol:"ETH",mark:"Ξ"},{id:"sol-solana",name:"Solana",symbol:"SOL",mark:"◎"}];
+const usdFmt=(n)=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:Number(n)<1?5:2}).format(Number(n)||0);
+const inrFmt=(n,decimals=2)=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:decimals}).format(Number(n)||0);
+const numFmt=(n,d=2)=>new Intl.NumberFormat("en-IN",{maximumFractionDigits:d}).format(Number(n)||0);
+const compact=n=>new Intl.NumberFormat("en-US",{notation:"compact",maximumFractionDigits:2}).format(Number(n)||0);
+const timeNow=()=>new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+const dateNow=()=>new Date().toLocaleDateString("en-IN",{weekday:"long",month:"long",day:"numeric"});
+const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+async function getJson(url,options={}){
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+  try{
+    const res=await fetch(url,{cache:"no-store",headers:{Accept:"application/json",...(options.headers||{})},signal:controller.signal});
+    const data=await res.json().catch(()=>null);
+    if(!res.ok)throw new Error(data?.error||data?.message||data?.detail||("HTTP "+res.status));
+    return data;
+  }catch(error){if(error.name==="AbortError")throw new Error("Request timed out");throw error}
+  finally{clearTimeout(timeout)}
+}
+function status(key,ok,message){
+  document.querySelectorAll('[data-status="'+key+'"]').forEach(el=>{el.textContent=message;el.classList.toggle("error",!ok)});
+  document.querySelectorAll('[data-dot="'+key+'"]').forEach(el=>{el.classList.toggle("ok",ok);el.classList.toggle("bad",!ok)});
+}
+function updateConnections(){
+  const keys=["coin","gold","fx","econ","hn"];
+  const ready=keys.filter(k=>!!state.last[k]).length;
+  $("connection-label").textContent=ready+" / 5 API"+(ready===1?"":"S")+" READY";
+  $("live-count").textContent=ready+" / 5 READY";
+  $("home-status").textContent=ready+" of 5 connections ready · "+timeNow();
+}
+function updateRefreshClock(){
+  if(!state.auto){$("next-update").textContent="AUTO OFF";return}
+  const now=Date.now();
+  const eligible=Object.keys(REFRESH).filter(k=>k!=="econ"||state.econToken);
+  const due=eligible.map(k=>Math.max(0,(state.last[k]||0)+REFRESH[k]-now));
+  const seconds=Math.ceil(Math.min(...due)/1000);
+  $("next-update").textContent="NEXT "+String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");
+  for(const key of eligible){
+    if(!state.busy.has(key)&&(!state.last[key]||now-state.last[key]>=REFRESH[key]))loadSource(key).catch(()=>{});
+  }
+}
+function setLast(key){state.last[key]=Date.now();const id={coin:"coin-last",gold:"gold-last",fx:"fx-last",econ:"econ-last",hn:"hn-last"}[key];if(id)$(id).textContent=timeNow();status(key,true,"Live · "+timeNow());updateConnections()}
+function switchView(name,updateHash=true){
+  if(!document.getElementById("view-"+name))name="home";
+  state.active=name;
+  document.querySelectorAll(".view").forEach(el=>el.classList.toggle("active",el.id==="view-"+name));
+  document.querySelectorAll(".tab[data-view]").forEach(el=>el.setAttribute("aria-selected",String(el.dataset.view===name)));
+  if(updateHash)history.replaceState(null,"","#"+name);
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(name==="fx"&&!state.data.fx)loadSource("fx").catch(()=>{});
+  if(name==="gold"&&!state.data.gold)loadSource("gold").catch(()=>{});
+  if(name==="hn"&&!state.data.stories.length)loadSource("hn").catch(()=>{});
+}
+document.querySelectorAll(".tab[data-view]").forEach(btn=>btn.addEventListener("click",()=>switchView(btn.dataset.view)));
+document.querySelectorAll("[data-jump]").forEach(btn=>btn.addEventListener("click",event=>{event.preventDefault();switchView(btn.dataset.jump)}));
+window.addEventListener("hashchange",()=>switchView(location.hash.slice(1)||"home",false));
+$("theme-button").addEventListener("click",()=>{document.body.classList.toggle("light");$("theme-button").textContent=document.body.classList.contains("light")?"☾":"☼";try{localStorage.setItem("pulse-theme",document.body.classList.contains("light")?"light":"dark")}catch{}});
+try{if(localStorage.getItem("pulse-theme")==="light"){document.body.classList.add("light");$("theme-button").textContent="☾"}}catch{}
+$("home-date").textContent=dateNow().toUpperCase();
+$("auto-refresh").addEventListener("change",event=>{state.auto=event.target.checked;updateRefreshClock()});
+$("refresh-button").addEventListener("click",async()=>{
+  $("refresh-button").disabled=true;$("refresh-icon").style.animation="spin .8s linear infinite";
+  await Promise.allSettled(Object.keys(REFRESH).map(key=>loadSource(key,true)));
+  $("refresh-button").disabled=false;$("refresh-icon").style.animation="";
+});
+async function loadCoins(){
+  const result=await Promise.allSettled(COINS.map(coin=>getJson("https://api.coinpaprika.com/v1/tickers/"+coin.id+"?quotes=USD")));
+  const items=result.map((r,i)=>r.status==="fulfilled"?{coin:COINS[i],data:r.value}:null).filter(Boolean);
+  if(!items.length)throw new Error("No ticker responses");
+  state.data.coins=items;
+  const btc=items.find(x=>x.coin.symbol==="BTC");
+  if(btc){const q=btc.data.quotes?.USD;$("home-btc").textContent=usdFmt(q.price);$("home-btc-note").textContent="CoinPaprika · "+(Number(q.percent_change_24h)>=0?"+":"")+numFmt(q.percent_change_24h)+"% 24h"}
+  $("coin-table").innerHTML=items.map(({coin,data})=>{const q=data.quotes?.USD||{};const change=Number(q.percent_change_24h)||0;return "<tr><td><span class=\"coin-name\">"+esc(coin.name)+"</span><span class=\"coin-symbol\">"+esc(coin.symbol)+"</span></td><td class=\"right mono\">"+usdFmt(q.price)+"</td><td class=\"right "+(change>=0?"positive":"negative")+" mono\">"+(change>=0?"+":"")+numFmt(change)+"%</td><td class=\"right mono\">"+usdFmt(q.market_cap||0)+"</td></tr>"}).join("");
+  $("coin-health").textContent=items.length+" assets · "+timeNow();$("home-btc-note").textContent="CoinPaprika · "+(Number(btc?.data?.quotes?.USD?.percent_change_24h)>=0?"+":"")+numFmt(btc?.data?.quotes?.USD?.percent_change_24h||0)+"% 24h";
+  setLast("coin");
+}
+async function loadGold(){
+  const data=await getJson("/api/gold/spot?symbol=XAU-INR-SPOT");
+  const row=data.symbols?.[0]||data;
+  const price=Number(row.price);
+  if(!Number.isFinite(price))throw new Error(data.error||"Gold price missing");
+  state.data.gold={price,stamp:row.computed_at,symbol:row.symbol};
+  const perGram=price/31.1034768;
+  $("home-gold").textContent=inrFmt(perGram*10,0);
+  $("home-gold-note").textContent="Goldprice.dev · INR / 10g · delayed";
+  $("gold-10g").textContent=inrFmt(perGram*10,0);
+  $("gold-ounce").textContent=inrFmt(price,2);
+  $("gold-stamp").textContent="Computed at "+(row.computed_at?new Date(row.computed_at).toLocaleString("en-IN"):"provider timestamp unavailable");
+  $("gold-delay").textContent=row.is_stale?"Provider marked this price stale":"Keyless data is approximately 15 minutes delayed";
+  updateGoldCalc();setLast("gold");
+}
+async function getRate(base,quote,force=false){
+  if(base===quote)return {base,quote,rate:1,date:new Date().toISOString().slice(0,10)};
+  const key=base.toUpperCase()+":"+quote.toUpperCase(),cached=state.rates.get(key);
+  if(!force&&cached&&Date.now()-cached.time<900000)return cached.data;
+  const query=new URLSearchParams({base,quote});
+  const data=await getJson("/api/frankfurter/rate?"+query.toString());
+  if(!Number.isFinite(Number(data.rate))||Number(data.rate)<=0)throw new Error("Frankfurter returned no rate");
+  const answer={base:data.base||base,quote:data.quote||quote,rate:Number(data.rate),date:data.date};
+  state.rates.set(key,{time:Date.now(),data:answer});return answer;
+}
+async function loadFx(force=false){
+  const [usd,eur,gbp]=await Promise.all([getRate("USD","INR",force),getRate("EUR","INR",force),getRate("GBP","INR",force)]);
+  state.data.fx={usd,eur,gbp};
+  $("home-fx").textContent=inrFmt(usd.rate,2);$("home-fx-note").textContent="Frankfurter · rate date "+usd.date;
+  $("fav-rates").innerHTML=[usd,eur,gbp].map(x=>"<div class=\"fav-rate\"><span>"+esc(x.base)+" → "+esc(x.quote)+" <small class=\"muted\">· "+esc(x.date)+"</small></span><strong>"+inrFmt(x.rate,2)+"</strong></div>").join("");
+  await convertFx(false);setLast("fx");
+}
+let fxRequest=0,fxTimer;
+async function convertFx(force=false){
+  const id=++fxRequest,amount=Number($("fx-amount").value),from=$("fx-from").value,to=$("fx-to").value;
+  if(!Number.isFinite(amount)||amount<0){$("fx-result").textContent="Enter a valid amount";$("fx-note").textContent="Use an amount of zero or more.";return false}
+  $("fx-result").classList.add("loading");
+  try{
+    const d=await getRate(from,to,force);
+    if(id!==fxRequest)return false;
+    $("fx-result").textContent=new Intl.NumberFormat("en-IN",{style:"currency",currency:to,maximumFractionDigits:to==="JPY"?0:2}).format(amount*d.rate);
+    $("fx-note").textContent="1 "+from+" = "+numFmt(d.rate,6)+" "+to+" · reference date "+d.date;
+    $("fx-result").classList.remove("loading");return true;
+  }catch(error){if(id!==fxRequest)return false;$("fx-result").textContent="Rate unavailable";$("fx-note").textContent=error.message+" · select another pair or retry.";throw error}
+  finally{if(id===fxRequest)$("fx-result").classList.remove("loading")}
+}
+$("fx-amount").addEventListener("input",()=>{clearTimeout(fxTimer);fxTimer=setTimeout(()=>convertFx().catch(()=>{}),220)});
+$("fx-from").addEventListener("change",()=>convertFx().catch(()=>{}));$("fx-to").addEventListener("change",()=>convertFx().catch(()=>{}));
+$("fx-swap").addEventListener("click",()=>{const from=$("fx-from"),to=$("fx-to"),v=from.value;from.value=to.value;to.value=v;convertFx().catch(()=>{})});
+$("fx-convert").addEventListener("click",()=>convertFx(true).catch(()=>{}));
+$("fx-refresh").addEventListener("click",()=>loadSource("fx",true));
+function updateGoldCalc(){
+  const grams=Math.max(0,Number($("gold-grams").value)||0),purity=Number($("gold-karat").value)||1,price=state.data.gold?.price;
+  $("gold-calc").textContent=price?inrFmt((price/31.1034768)*grams*purity,2):"Waiting for live gold rate…";
+}
+$("gold-grams").addEventListener("input",updateGoldCalc);$("gold-karat").addEventListener("change",updateGoldCalc);
+function extractPoints(data){
+  let rows=data?.values||data?.data?.values||data?.observations||data?.data||data?.results||data?.series||[];
+  if(rows&& !Array.isArray(rows)&&typeof rows==="object")rows=rows.values||rows.observations||rows.data||[];
+  if(!Array.isArray(rows)&&Array.isArray(data))rows=data;
+  if(!Array.isArray(rows))return[];
+  return rows.map(item=>{
+    if(Array.isArray(item))return{date:String(item[0]??""),value:Number(item[1])};
+    const value=Number(item.value??item.obsvalue??item.observation??item.val??item.y);
+    return{date:String(item.date??item.period??item.obstime??item.time??item.x??""),value};
+  }).filter(x=>Number.isFinite(x.value)&&x.date).slice(-24);
+}
+async function loadEcon(){
+  if(!state.econToken){status("econ",false,"Token needed");return false}
+  const series=String($("econ-series").value||"CPIUS").trim().toUpperCase();
+  const data=await getJson("/api/econdb/series?series="+encodeURIComponent(series),{headers:{"x-econdb-token":state.econToken}});
+  const points=extractPoints(data);
+  if(!points.length)throw new Error("Response received but no series points were recognized. Check the series code.");
+  state.econSeries=series;state.data.econ={series,points,raw:data};
+  const last=points[points.length-1];
+  $("home-econ").textContent=numFmt(last.value,2);$("home-econ-note").textContent="EconDB · "+series+" · "+last.date;
+  $("econ-value").textContent=numFmt(last.value,3);$("econ-date").textContent=last.date;$("econ-name").textContent=series;$("econ-count").textContent=String(points.length);
+  $("econ-results").classList.add("show");drawChart(points);$("econ-message").textContent="Connected · showing "+points.length+" latest observations for "+series+".";
+  setLast("econ");return true;
+}
+function drawChart(points){
+  const values=points.map(p=>p.value),min=Math.min(...values),max=Math.max(...values),span=max-min||1,w=700,h=180,pad=16;
+  const coords=values.map((v,i)=>[pad+i*(w-2*pad)/Math.max(1,values.length-1),h-pad-(v-min)/span*(h-2*pad)]);
+  const line=coords.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+  const area=line+" L "+coords[coords.length-1][0].toFixed(1)+" "+(h-pad)+" L "+pad+" "+(h-pad)+" Z";
+  $("econ-chart").innerHTML="<defs><linearGradient id=\"chartGrad\" x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\"><stop offset=\"0%\" stop-color=\"#d7ff5e\"/><stop offset=\"100%\" stop-color=\"#d7ff5e\" stop-opacity=\"0\"/></linearGradient></defs><path class=\"chart-grid\" d=\"M0 45H700 M0 90H700 M0 135H700\"/><path class=\"chart-fill\" d=\""+area+"\"/><path class=\"chart-line\" d=\""+line+"\"/><circle cx=\""+coords[coords.length-1][0]+"\" cy=\""+coords[coords.length-1][1]+"\" r=\"5\" fill=\"#d7ff5e\"/>";
+}
+$("econ-connect").addEventListener("click",async()=>{
+  const token=$("econ-token").value.trim(),series=$("econ-series").value.trim().toUpperCase();
+  if(!token){$("econ-message").textContent="Paste your EconDB token first.";return}
+  if(!/^[A-Z0-9_.-]{2,32}$/.test(series)){$("econ-message").textContent="Enter a valid series code.";return}
+  state.econToken=token;state.econSeries=series;$("econ-token").value="";
+  state.last.econ=0;status("econ",false,"Connecting");
+  try{await loadSource("econ",true)}catch{}
+});
+$("econ-series").addEventListener("change",()=>{if(state.econToken){state.last.econ=0;loadSource("econ",true)}});
+async function loadNews(){
+  const ids=await getJson("https://hacker-news.firebaseio.com/v0/"+state.feed+".json");
+  const stories=await Promise.allSettled((ids||[]).slice(0,12).map(id=>getJson("https://hacker-news.firebaseio.com/v0/item/"+id+".json")));
+  const items=stories.filter(x=>x.status==="fulfilled"&&x.value?.title).map(x=>x.value);
+  if(!items.length)throw new Error("No story details returned");
+  state.data.stories=items;renderNews();
+  const first=items[0];$("home-hn").textContent=String(first.score||0)+" pts";$("home-hn-note").textContent="Hacker News · top story";
+  $("home-story").innerHTML="<div class=\"story-feature\"><div class=\"tiny\">TOP STORY · "+esc(String(first.score||0))+" POINTS</div><h4>"+esc(first.title)+"</h4><p>"+esc(first.by||"unknown")+" · "+(first.descendants||0)+" comments · "+esc(hostOf(first.url))+"</p></div>";
+  setLast("hn");
+}
+function hostOf(url){try{return url?new URL(url).hostname.replace(/^www\./,""):"news.ycombinator.com"}catch{return"news.ycombinator.com"}}
+function renderNews(){
+  const query=$("hn-search").value.trim().toLowerCase();
+  const filtered=state.data.stories.filter(x=>(x.title||"").toLowerCase().includes(query));
+  $("hn-list").innerHTML=filtered.length?filtered.map((s,i)=>"<article class=\"news-row\"><span class=\"news-rank\">"+String(i+1).padStart(2,"0")+"</span><div><a class=\"news-title\" href=\"https://news.ycombinator.com/item?id="+encodeURIComponent(s.id)+"\" target=\"_blank\" rel=\"noreferrer\">"+esc(s.title)+"</a><div class=\"news-host\">"+esc(hostOf(s.url))+" · "+esc(s.by||"unknown")+" · "+(s.descendants||0)+" comments</div></div><span class=\"news-points\">▲ "+(s.score||0)+"</span></article>").join(""):"<div class=\"empty\">No loaded stories match that search.</div>";
+}
+$("hn-search").addEventListener("input",renderNews);
+document.querySelectorAll(".feed-switch").forEach(button=>button.addEventListener("click",()=>{document.querySelectorAll(".feed-switch").forEach(x=>x.classList.remove("selected"));button.classList.add("selected");state.feed=button.dataset.feed;loadSource("hn",true)}));
+async function loadSource(key,force=false){
+  if(state.busy.has(key))return false;
+  if(key==="econ"&&!state.econToken){status("econ",false,"Token needed");$("home-econ").textContent="—";$("home-econ-note").textContent="EconDB · API token required";return false}
+  if(!force&&state.last[key]&&Date.now()-state.last[key]<REFRESH[key])return true;
+  state.busy.add(key);
+  try{
+    if(key==="coin")await loadCoins();
+    if(key==="gold")await loadGold();
+    if(key==="fx")await loadFx(force);
+    if(key==="econ")await loadEcon();
+    if(key==="hn")await loadNews();
+    return true;
+  }catch(error){
+    status(key,false,"Unavailable · "+error.message);
+    if(key==="coin")$("home-btc-note").textContent="CoinPaprika · "+error.message;
+    if(key==="gold")$("home-gold-note").textContent="Goldprice.dev · "+error.message;
+    if(key==="fx"){$("home-fx-note").textContent="Frankfurter · "+error.message;$("fx-note").textContent=error.message}
+    if(key==="econ")$("econ-message").textContent=error.message;
+    if(key==="hn")$("home-hn-note").textContent="Hacker News · "+error.message;
+    return false;
+  }finally{state.busy.delete(key);updateConnections();updateRefreshClock()}
+}
+$("hn-search").value="";
+function init(){
+  const route=location.hash.slice(1);if(route)switchView(route,false);
+  loadSource("coin",true);loadSource("gold",true);loadSource("fx",true);loadSource("econ",true);loadSource("hn",true);
+  updateRefreshClock();
+  setInterval(()=>{if(state.auto)updateRefreshClock()},1000);
+}
+init();
+</script>
+<script type="module">import { mountSiteWidget } from "/_sites/dispatch-assets/sites-widget.js";mountSiteWidget({"kind":"editor-composer","mobileEnabled":false,"environment":"production","chatgptOrigin":"https://chatgpt.com","locale":"en-US","accountId":"personal","projectId":"appgprj_6ae0bcd5dea48191aaee851f1573f990","projectTitle":"Market \u0026 Tech Pulse"});</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a512ff7b7fb01340',t:'MTc5MzExNzcxMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
