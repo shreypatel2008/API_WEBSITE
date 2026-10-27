@@ -169,8 +169,8 @@ body.light .gold-price.silver{background:linear-gradient(145deg,#edf4fc,#fff);bo
   </div>
   <div class="stats">
     <article class="metric" style="--tint:var(--lime);--glow:var(--lime)"><div class="metric-top"><span>CRYPTO · BTC</span><span class="metric-icon">₿</span></div><div class="metric-value" id="home-btc">—</div><div class="metric-note" id="home-btc-note">CoinPaprika · loading</div><a href="#coin" class="metric-link" data-jump="coin" aria-label="Open CoinPaprika tab"></a></article>
-    <article class="metric" style="--tint:var(--orange);--glow:var(--orange)"><div class="metric-top"><span>GOLD · INR / 10G</span><span class="metric-icon">Au</span></div><div class="metric-value" id="home-gold">—</div><div class="metric-note" id="home-gold-note">Goldprice.dev · loading</div><a href="#gold" class="metric-link" data-jump="gold" aria-label="Open Goldprice tab"></a></article>
-    <article class="metric" style="--tint:var(--cyan);--glow:var(--cyan)"><div class="metric-top"><span>USD → INR</span><span class="metric-icon">₹</span></div><div class="metric-value" id="home-fx">—</div><div class="metric-note" id="home-fx-note">Frankfurter · loading</div><a href="#fx" class="metric-link" data-jump="fx" aria-label="Open Frankfurter tab"></a></article>
+    <article class="metric" style="--tint:var(--orange);--glow:var(--orange)"><div class="metric-top"><span>GOLD · INR / 10G</span><span class="metric-icon">Au</span></div><div class="metric-value" id="home-gold">₹1,22,491</div><div class="metric-note" id="home-gold-note">Snapshot fallback · 23 Oct 2026</div><a href="#gold" class="metric-link" data-jump="gold" aria-label="Open Goldprice tab"></a></article>
+    <article class="metric" style="--tint:var(--cyan);--glow:var(--cyan)"><div class="metric-top"><span>USD → INR</span><span class="metric-icon">₹</span></div><div class="metric-value" id="home-fx">₹95.12</div><div class="metric-note" id="home-fx-note">Snapshot fallback · 27 Oct 2026</div><a href="#fx" class="metric-link" data-jump="fx" aria-label="Open Frankfurter tab"></a></article>
     <article class="metric" style="--tint:var(--violet);--glow:var(--violet)"><div class="metric-top"><span>US CPI INDEX</span><span class="metric-icon">↗</span></div><div class="metric-value" id="home-econ">—</div><div class="metric-note" id="home-econ-note">EconDB · connect token</div><a href="#econ" class="metric-link" data-jump="econ" aria-label="Open EconDB tab"></a></article>
     <article class="metric" style="--tint:var(--pink);--glow:var(--pink)"><div class="metric-top"><span>TOP STORY SCORE</span><span class="metric-icon">Y</span></div><div class="metric-value" id="home-hn">—</div><div class="metric-note" id="home-hn-note">Hacker News · loading</div><a href="#hn" class="metric-link" data-jump="hn" aria-label="Open Hacker News tab"></a></article>
   </div>
@@ -219,10 +219,10 @@ body.light .gold-price.silver{background:linear-gradient(145deg,#edf4fc,#fff);bo
   <div class="api-layout">
     <div>
       <div class="gold-wrap">
-        <article class="gold-price"><h3>Gold · XAU / INR</h3><div class="big" id="gold-10g">—</div><div class="unit">INR / 10 grams · calculated from spot per troy ounce</div><div class="tstamp" id="gold-stamp">Waiting for price response</div></article>
-        <article class="gold-price silver"><h3>Gold · spot per troy ounce</h3><div class="big" id="gold-ounce">—</div><div class="unit">INR / troy ounce · XAU-INR-SPOT</div><div class="tstamp" id="gold-delay">Free data may be delayed</div></article>
+        <article class="gold-price"><h3>Gold · XAU / INR</h3><div class="big" id="gold-10g">₹1,22,491</div><div class="unit">INR / 10 grams · calculated from spot per troy ounce</div><div class="tstamp" id="gold-stamp">Snapshot fallback · 23 Oct 2026</div></article>
+        <article class="gold-price silver"><h3>Gold · spot per troy ounce</h3><div class="big" id="gold-ounce">₹3,80,990.55</div><div class="unit">INR / troy ounce · XAU-INR-SPOT</div><div class="tstamp" id="gold-delay">Snapshot estimate · 23 Oct 2026</div></article>
       </div>
-      <section class="calc"><h3>Gold value calculator</h3><div class="field-grid"><div class="field"><label for="gold-grams">Weight (grams)</label><input type="number" id="gold-grams" min="0" step="any" value="10"></div><div class="field"><label for="gold-karat">Purity</label><select id="gold-karat"><option value="1">24K · 99.9%</option><option value="0.9167">22K · 91.67%</option><option value="0.75">18K · 75%</option><option value="0.585">14K · 58.5%</option></select></div></div><div class="calc-output" id="gold-calc">Waiting for live gold rate…</div><div class="rate-note">Estimate uses the XAU reference price only. It does not include tax, making charges or local premiums.</div></section>
+      <section class="calc"><h3>Gold value calculator</h3><div class="field-grid"><div class="field"><label for="gold-grams">Weight (grams)</label><input type="number" id="gold-grams" min="0" step="any" value="10"></div><div class="field"><label for="gold-karat">Purity</label><select id="gold-karat"><option value="1">24K · 99.9%</option><option value="0.9167">22K · 91.67%</option><option value="0.75">18K · 75%</option><option value="0.585">14K · 58.5%</option></select></div></div><div class="calc-output" id="gold-calc">₹1,22,491.31</div><div class="rate-note">The fallback estimate uses Goldprice.dev’s XAU/USD example and a same-day USD/INR reference snapshot from 23 Oct 2026. It excludes tax, making charges and local premiums.</div></section>
     </div>
     <aside class="card"><div class="card-head"><div><h3>Gold API connection</h3><p>Fetched through a same-site endpoint.</p></div><span class="source-pill" style="--tint:var(--orange)">GOLDPRICE.DEV</span></div><div class="api-info"><div class="info-row"><span>Metal symbol</span><strong>XAU-INR-SPOT</strong></div><div class="info-row"><span>API update type</span><strong>15m-delayed free spot</strong></div><div class="info-row"><span>Last synced</span><strong id="gold-last">Waiting</strong></div><div class="info-row"><span>Source docs</span><a class="docs-link" href="https://goldprice.dev/docs/endpoints/prices" target="_blank" rel="noreferrer">Open docs ↗</a></div></div><div class="notice">Goldprice.dev does not allow browser CORS, so the site fetches it server-side and returns only the public price data.</div></aside>
   </div>
@@ -231,8 +231,8 @@ body.light .gold-price.silver{background:linear-gradient(145deg,#edf4fc,#fff);bo
 <section class="view" id="view-fx" role="tabpanel">
   <div class="api-hero" data-symbol="₹" style="--tint:var(--cyan)"><p class="kicker">API 03 · CURRENCY</p><h1>Frankfurter</h1><p>Convert between currencies using daily reference rates. The result recalculates as you edit the amount or change either currency.</p></div>
   <div class="api-layout">
-    <section class="card"><div class="card-head"><div><h3>Currency converter</h3><p>Reference rates update when providers publish a new observation.</p></div><span class="source-pill" style="--tint:var(--cyan)">FRANKFURTER V2</span></div><div class="converter"><div class="conversion-output" id="fx-result">—</div><div class="field-grid"><div class="field"><label for="fx-amount">Amount</label><input type="number" id="fx-amount" value="1" min="0" step="any"></div><div class="field"><label for="fx-from">From</label><select id="fx-from"><option>USD</option><option>INR</option><option>EUR</option><option>GBP</option><option>JPY</option><option>CAD</option><option>AUD</option><option>CHF</option></select></div><div class="field"><label for="fx-to">To</label><select id="fx-to"><option>INR</option><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>CAD</option><option>AUD</option><option>CHF</option></select></div><div class="field"><label>&nbsp;</label><button class="btn" id="fx-swap" type="button">Swap ↔</button></div></div><div class="converter-actions"><button class="btn lime" id="fx-convert" type="button">Get latest rate</button><button class="btn" id="fx-refresh" type="button">Refresh rate</button></div><div class="rate-note" id="fx-note">Loading latest USD → INR reference rate…</div></div></section>
-    <aside class="card"><div class="card-head"><div><h3>Popular pairs</h3><p>Updated from the same provider.</p></div></div><div class="fav-rates" id="fav-rates"><div class="empty">Loading common rates…</div></div><div class="api-info"><div class="info-row"><span>Endpoint</span><strong>/v2/rate/{base}/{quote}</strong></div><div class="info-row"><span>Last synced</span><strong id="fx-last">Waiting</strong></div><div class="info-row"><span>Source docs</span><a class="docs-link" href="https://frankfurter.dev/v2/" target="_blank" rel="noreferrer">Open docs ↗</a></div></div></aside>
+    <section class="card"><div class="card-head"><div><h3>Currency converter</h3><p>Reference rates update when providers publish a new observation.</p></div><span class="source-pill" style="--tint:var(--cyan)">FRANKFURTER V2</span></div><div class="converter"><div class="conversion-output" id="fx-result">₹95.12</div><div class="field-grid"><div class="field"><label for="fx-amount">Amount</label><input type="number" id="fx-amount" value="1" min="0" step="any"></div><div class="field"><label for="fx-from">From</label><select id="fx-from"><option>USD</option><option>INR</option><option>EUR</option><option>GBP</option><option>JPY</option><option>CAD</option><option>AUD</option><option>CHF</option></select></div><div class="field"><label for="fx-to">To</label><select id="fx-to"><option>INR</option><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>CAD</option><option>AUD</option><option>CHF</option></select></div><div class="field"><label>&nbsp;</label><button class="btn" id="fx-swap" type="button">Swap ↔</button></div></div><div class="converter-actions"><button class="btn lime" id="fx-convert" type="button">Get latest rate</button><button class="btn" id="fx-refresh" type="button">Refresh rate</button></div><div class="rate-note" id="fx-note">Snapshot fallback · 1 USD = ₹95.12 · 27 Oct 2026</div></div></section>
+    <aside class="card"><div class="card-head"><div><h3>Popular pairs</h3><p>Saved rates stay visible if the provider is unreachable.</p></div></div><div class="fav-rates" id="fav-rates"><div class="empty">Snapshot fallback · 27 Oct 2026</div></div><div class="api-info"><div class="info-row"><span>Endpoint</span><strong>/v2/rate/{base}/{quote}</strong></div><div class="info-row"><span>Last synced</span><strong id="fx-last">Saved snapshot · 27 Oct</strong></div><div class="info-row"><span>Source docs</span><a class="docs-link" href="https://frankfurter.dev/v2/" target="_blank" rel="noreferrer">Open docs ↗</a></div></div></aside>
   </div>
 </section>
 
@@ -257,8 +257,11 @@ body.light .gold-price.silver{background:linear-gradient(145deg,#edf4fc,#fff);bo
 
 <script>
 const $=id=>document.getElementById(id);
-const REFRESH={coin:600000,gold:120000,fx:900000,econ:900000,hn:60000};
-const state={active:"home",feed:"topstories",auto:true,busy:new Set(),last:{},data:{coins:[],gold:null,fx:null,econ:null,stories:[]},econToken:"",econSeries:"CPIUS",rates:new Map()};
+const REFRESH={coin:600000,gold:900000,fx:900000,econ:900000,hn:60000};
+const FX_SNAPSHOT_DATE="2026-10-27",GOLD_SNAPSHOT_DATE="2026-10-23";
+const INR_PER_UNIT={INR:1,USD:95.115,EUR:105.9559,GBP:126.548852,JPY:0.6031,CAD:67.8973,AUD:66.7325,CHF:115.0063};
+const GOLD_SNAPSHOT_INR_PER_OUNCE=4012.75*94.945;
+const state={active:"home",feed:"topstories",auto:true,busy:new Set(),last:{},retryAt:{},data:{coins:[],gold:null,fx:null,econ:null,stories:[]},econToken:"",econSeries:"CPIUS",rates:new Map()};
 const COINS=[{id:"btc-bitcoin",name:"Bitcoin",symbol:"BTC",mark:"₿"},{id:"eth-ethereum",name:"Ethereum",symbol:"ETH",mark:"Ξ"},{id:"sol-solana",name:"Solana",symbol:"SOL",mark:"◎"}];
 const usdFmt=(n)=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:Number(n)<1?5:2}).format(Number(n)||0);
 const inrFmt=(n,decimals=2)=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:decimals}).format(Number(n)||0);
@@ -266,6 +269,36 @@ const numFmt=(n,d=2)=>new Intl.NumberFormat("en-IN",{maximumFractionDigits:d}).f
 const compact=n=>new Intl.NumberFormat("en-US",{notation:"compact",maximumFractionDigits:2}).format(Number(n)||0);
 const timeNow=()=>new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
 const dateNow=()=>new Date().toLocaleDateString("en-IN",{weekday:"long",month:"long",day:"numeric"});
+const snapshotLabel=date=>new Date(date+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"});
+function storageRead(key){try{return JSON.parse(localStorage.getItem(key)||"null")}catch{return null}}
+function storageWrite(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch{}}
+function fxStorageKey(base,quote){return "pulse-fx-v1:"+base.toUpperCase()+":"+quote.toUpperCase()}
+function snapshotRate(base,quote){
+  base=base.toUpperCase();quote=quote.toUpperCase();
+  if(!(base in INR_PER_UNIT)||!(quote in INR_PER_UNIT))return null;
+  return {base,quote,rate:INR_PER_UNIT[base]/INR_PER_UNIT[quote],date:FX_SNAPSHOT_DATE,fallback:true};
+}
+function savedRate(base,quote){
+  const saved=storageRead(fxStorageKey(base,quote));
+  if(saved&&Number.isFinite(Number(saved.rate))&&Number(saved.rate)>0)return {...saved,fallback:true};
+  return snapshotRate(base,quote);
+}
+function goldFallback(){
+  const saved=storageRead("pulse-gold-v1");
+  if(saved&&Number.isFinite(Number(saved.price))&&Number(saved.price)>0)return {...saved,fallback:true};
+  return {price:GOLD_SNAPSHOT_INR_PER_OUNCE,stamp:GOLD_SNAPSHOT_DATE+"T12:00:00.000Z",symbol:"XAU-INR-SPOT",fallback:true,is_stale:true};
+}
+function primeSavedMarketData(){
+  const row=goldFallback(),goldDate=String(row.stamp||GOLD_SNAPSHOT_DATE).slice(0,10);renderGold(row,true);setSaved("gold",goldDate);
+  const usd=savedRate("USD","INR");
+  if(usd){
+    state.rates.set("USD:INR",{time:Date.now(),data:usd});
+    $("home-fx").textContent=inrFmt(usd.rate,2);$("home-fx-note").textContent="Saved reference snapshot · "+snapshotLabel(usd.date);
+    const fav=[usd,savedRate("EUR","INR"),savedRate("GBP","INR")].filter(Boolean);
+    $("fav-rates").innerHTML=fav.map(x=>"<div class=\"fav-rate\"><span>"+esc(x.base)+" → "+esc(x.quote)+" <small class=\"muted\">· "+snapshotLabel(x.date)+" · saved</small></span><strong>"+inrFmt(x.rate,2)+"</strong></div>").join("");
+    setSaved("fx",usd.date);
+  }
+}
 const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 async function getJson(url,options={}){
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
@@ -292,14 +325,15 @@ function updateRefreshClock(){
   if(!state.auto){$("next-update").textContent="AUTO OFF";return}
   const now=Date.now();
   const eligible=Object.keys(REFRESH).filter(k=>k!=="econ"||state.econToken);
-  const due=eligible.map(k=>Math.max(0,(state.last[k]||0)+REFRESH[k]-now));
+  const due=eligible.map(k=>Math.max(0,Math.max((state.last[k]||0)+REFRESH[k],state.retryAt[k]||0)-now));
   const seconds=Math.ceil(Math.min(...due)/1000);
   $("next-update").textContent="NEXT "+String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");
   for(const key of eligible){
-    if(!state.busy.has(key)&&(!state.last[key]||now-state.last[key]>=REFRESH[key]))loadSource(key).catch(()=>{});
+    if(!state.busy.has(key)&&now>=Math.max((state.last[key]||0)+REFRESH[key],state.retryAt[key]||0))loadSource(key).catch(()=>{});
   }
 }
-function setLast(key){state.last[key]=Date.now();const id={coin:"coin-last",gold:"gold-last",fx:"fx-last",econ:"econ-last",hn:"hn-last"}[key];if(id)$(id).textContent=timeNow();status(key,true,"Live · "+timeNow());updateConnections()}
+function setLast(key){state.last[key]=Date.now();delete state.retryAt[key];const id={coin:"coin-last",gold:"gold-last",fx:"fx-last",econ:"econ-last",hn:"hn-last"}[key];if(id)$(id).textContent=timeNow();status(key,true,"Live · "+timeNow());updateConnections()}
+function setSaved(key,date){state.last[key]=Date.now();state.retryAt[key]=Date.now()+REFRESH[key];const id={gold:"gold-last",fx:"fx-last"}[key];if(id)$(id).textContent="Saved · "+snapshotLabel(date);status(key,true,"Saved snapshot · "+snapshotLabel(date));updateConnections()}
 function switchView(name,updateHash=true){
   if(!document.getElementById("view-"+name))name="home";
   state.active=name;
@@ -334,37 +368,50 @@ async function loadCoins(){
   $("coin-health").textContent=items.length+" assets · "+timeNow();$("home-btc-note").textContent="CoinPaprika · "+(Number(btc?.data?.quotes?.USD?.percent_change_24h)>=0?"+":"")+numFmt(btc?.data?.quotes?.USD?.percent_change_24h||0)+"% 24h";
   setLast("coin");
 }
-async function loadGold(){
-  const data=await getJson("/api/gold/spot?symbol=XAU-INR-SPOT");
-  const row=data.symbols?.[0]||data;
-  const price=Number(row.price);
-  if(!Number.isFinite(price))throw new Error(data.error||"Gold price missing");
-  state.data.gold={price,stamp:row.computed_at,symbol:row.symbol};
+function renderGold(row,fallback=false){
+  const price=Number(row.price),stamp=String(row.stamp||row.computed_at||GOLD_SNAPSHOT_DATE),date=stamp.slice(0,10);
+  state.data.gold={price,stamp,symbol:row.symbol||"XAU-INR-SPOT",fallback:fallback||!!row.fallback};
   const perGram=price/31.1034768;
   $("home-gold").textContent=inrFmt(perGram*10,0);
-  $("home-gold-note").textContent="Goldprice.dev · INR / 10g · delayed";
+  $("home-gold-note").textContent=state.data.gold.fallback?"Saved snapshot · "+snapshotLabel(date):"Goldprice.dev · INR / 10g · 15m delayed";
   $("gold-10g").textContent=inrFmt(perGram*10,0);
   $("gold-ounce").textContent=inrFmt(price,2);
-  $("gold-stamp").textContent="Computed at "+(row.computed_at?new Date(row.computed_at).toLocaleString("en-IN"):"provider timestamp unavailable");
-  $("gold-delay").textContent=row.is_stale?"Provider marked this price stale":"Keyless data is approximately 15 minutes delayed";
-  updateGoldCalc();setLast("gold");
+  $("gold-stamp").textContent=state.data.gold.fallback?"Snapshot fallback · "+snapshotLabel(date):"Computed at "+(row.computed_at?new Date(row.computed_at).toLocaleString("en-IN"):"provider timestamp unavailable");
+  $("gold-delay").textContent=state.data.gold.fallback?"Estimate from XAU/USD × USD/INR snapshots · 23 Oct":"Keyless data is approximately 15 minutes delayed";
+  updateGoldCalc();
+}
+async function loadGold(){
+  try{
+    const data=await getJson("/api/gold/spot?symbol=XAU-INR-SPOT"),row=data.symbols?.[0]||data,price=Number(row.price);
+    if(!Number.isFinite(price)||price<=0)throw new Error(data.error||"Gold price missing");
+    const isFallback=!!(data.fallback||row.fallback||row.is_stale),live={...row,price,stamp:row.computed_at||GOLD_SNAPSHOT_DATE,fallback:isFallback};
+    storageWrite("pulse-gold-v1",{price,stamp:live.stamp,symbol:live.symbol||"XAU-INR-SPOT"});
+    renderGold(live,isFallback);if(isFallback)setSaved("gold",String(live.stamp).slice(0,10));else setLast("gold");
+  }catch(error){
+    const row=goldFallback();renderGold(row,true);setSaved("gold",String(row.stamp||GOLD_SNAPSHOT_DATE).slice(0,10));
+    $("home-gold-note").textContent="Saved snapshot · "+snapshotLabel(String(row.stamp||GOLD_SNAPSHOT_DATE).slice(0,10));
+  }
 }
 async function getRate(base,quote,force=false){
   if(base===quote)return {base,quote,rate:1,date:new Date().toISOString().slice(0,10)};
   const key=base.toUpperCase()+":"+quote.toUpperCase(),cached=state.rates.get(key);
   if(!force&&cached&&Date.now()-cached.time<900000)return cached.data;
-  const query=new URLSearchParams({base,quote});
-  const data=await getJson("/api/frankfurter/rate?"+query.toString());
-  if(!Number.isFinite(Number(data.rate))||Number(data.rate)<=0)throw new Error("Frankfurter returned no rate");
-  const answer={base:data.base||base,quote:data.quote||quote,rate:Number(data.rate),date:data.date};
-  state.rates.set(key,{time:Date.now(),data:answer});return answer;
+  try{
+    const query=new URLSearchParams({base,quote}),data=await getJson("/api/frankfurter/rate?"+query.toString());
+    if(!Number.isFinite(Number(data.rate))||Number(data.rate)<=0)throw new Error("Frankfurter returned no rate");
+    const answer={base:data.base||base,quote:data.quote||quote,rate:Number(data.rate),date:data.date||FX_SNAPSHOT_DATE,fallback:!!data.fallback};
+    state.rates.set(key,{time:Date.now(),data:answer});storageWrite(fxStorageKey(base,quote),answer);return answer;
+  }catch(error){
+    const answer=savedRate(base,quote);if(!answer)throw error;
+    state.rates.set(key,{time:Date.now(),data:answer});return answer;
+  }
 }
 async function loadFx(force=false){
   const [usd,eur,gbp]=await Promise.all([getRate("USD","INR",force),getRate("EUR","INR",force),getRate("GBP","INR",force)]);
   state.data.fx={usd,eur,gbp};
-  $("home-fx").textContent=inrFmt(usd.rate,2);$("home-fx-note").textContent="Frankfurter · rate date "+usd.date;
-  $("fav-rates").innerHTML=[usd,eur,gbp].map(x=>"<div class=\"fav-rate\"><span>"+esc(x.base)+" → "+esc(x.quote)+" <small class=\"muted\">· "+esc(x.date)+"</small></span><strong>"+inrFmt(x.rate,2)+"</strong></div>").join("");
-  await convertFx(false);setLast("fx");
+  $("home-fx").textContent=inrFmt(usd.rate,2);$("home-fx-note").textContent=usd.fallback?"Saved snapshot · "+snapshotLabel(usd.date):"Frankfurter · rate date "+usd.date;
+  $("fav-rates").innerHTML=[usd,eur,gbp].map(x=>"<div class=\"fav-rate\"><span>"+esc(x.base)+" → "+esc(x.quote)+" <small class=\"muted\">· "+snapshotLabel(x.date)+(x.fallback?" · saved":"")+"</small></span><strong>"+inrFmt(x.rate,2)+"</strong></div>").join("");
+  await convertFx(false);if([usd,eur,gbp].some(x=>x.fallback))setSaved("fx",FX_SNAPSHOT_DATE);else setLast("fx");
 }
 let fxRequest=0,fxTimer;
 async function convertFx(force=false){
@@ -375,9 +422,17 @@ async function convertFx(force=false){
     const d=await getRate(from,to,force);
     if(id!==fxRequest)return false;
     $("fx-result").textContent=new Intl.NumberFormat("en-IN",{style:"currency",currency:to,maximumFractionDigits:to==="JPY"?0:2}).format(amount*d.rate);
-    $("fx-note").textContent="1 "+from+" = "+numFmt(d.rate,6)+" "+to+" · reference date "+d.date;
+    $("fx-note").textContent="1 "+from+" = "+numFmt(d.rate,6)+" "+to+(d.fallback?" · saved snapshot · "+snapshotLabel(d.date):" · reference date "+d.date);
     $("fx-result").classList.remove("loading");return true;
-  }catch(error){if(id!==fxRequest)return false;$("fx-result").textContent="Rate unavailable";$("fx-note").textContent=error.message+" · select another pair or retry.";throw error}
+  }catch(error){
+    if(id!==fxRequest)return false;
+    const fallback=savedRate(from,to);
+    if(fallback){
+      const formatted=new Intl.NumberFormat("en-IN",{style:"currency",currency:to,maximumFractionDigits:to==="JPY"?0:2}).format(amount*fallback.rate);
+      $("fx-result").textContent=formatted;$("fx-note").textContent="1 "+from+" = "+numFmt(fallback.rate,6)+" "+to+" · saved snapshot · "+snapshotLabel(fallback.date);return true;
+    }
+    $("fx-result").textContent="No saved snapshot for this currency pair";$("fx-note").textContent="Choose one of the listed currencies to use the stored reference rates.";return false;
+  }
   finally{if(id===fxRequest)$("fx-result").classList.remove("loading")}
 }
 $("fx-amount").addEventListener("input",()=>{clearTimeout(fxTimer);fxTimer=setTimeout(()=>convertFx().catch(()=>{}),220)});
@@ -461,6 +516,15 @@ async function loadSource(key,force=false){
     if(key==="hn")await loadNews();
     return true;
   }catch(error){
+    state.retryAt[key]=Date.now()+Math.max(REFRESH[key]||900000,900000);
+    if(key==="gold"){
+      const row=goldFallback();renderGold(row,true);setSaved("gold",String(row.stamp||GOLD_SNAPSHOT_DATE).slice(0,10));
+      $("home-gold-note").textContent="Saved snapshot · "+snapshotLabel(String(row.stamp||GOLD_SNAPSHOT_DATE).slice(0,10));return false;
+    }
+    if(key==="fx"){
+      const base=$("fx-from").value,quote=$("fx-to").value,fallback=savedRate(base,quote);
+      if(fallback){const amount=Number($("fx-amount").value)||0;$("fx-result").textContent=new Intl.NumberFormat("en-IN",{style:"currency",currency:quote,maximumFractionDigits:quote==="JPY"?0:2}).format(amount*fallback.rate);$("fx-note").textContent="Saved snapshot · "+snapshotLabel(fallback.date);$("home-fx").textContent=inrFmt((savedRate("USD","INR")||fallback).rate,2);setSaved("fx",fallback.date);return false;}
+    }
     status(key,false,"Unavailable · "+error.message);
     if(key==="coin")$("home-btc-note").textContent="CoinPaprika · "+error.message;
     if(key==="gold")$("home-gold-note").textContent="Goldprice.dev · "+error.message;
@@ -472,6 +536,7 @@ async function loadSource(key,force=false){
 }
 $("hn-search").value="";
 function init(){
+  primeSavedMarketData();
   const route=location.hash.slice(1);if(route)switchView(route,false);
   loadSource("coin",true);loadSource("gold",true);loadSource("fx",true);loadSource("econ",true);loadSource("hn",true);
   updateRefreshClock();
@@ -479,5 +544,5 @@ function init(){
 }
 init();
 </script>
-<script type="module">import { mountSiteWidget } from "/_sites/dispatch-assets/sites-widget.js";mountSiteWidget({"kind":"editor-composer","mobileEnabled":false,"environment":"production","chatgptOrigin":"https://chatgpt.com","locale":"en-US","accountId":"personal","projectId":"appgprj_6ae0bcd5dea48191aaee851f1573f990","projectTitle":"Market \u0026 Tech Pulse"});</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a512ff7b7fb01340',t:'MTc5MzExNzcxMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script type="module">import { mountSiteWidget } from "/_sites/dispatch-assets/sites-widget.js";mountSiteWidget({"kind":"editor-composer","mobileEnabled":false,"environment":"production","chatgptOrigin":"https://chatgpt.com","locale":"en-US","accountId":"personal","projectId":"appgprj_6ae0bcd5dea48191aaee851f1573f990","projectTitle":"Market \u0026 Tech Pulse"});</script></body>
 </html>
